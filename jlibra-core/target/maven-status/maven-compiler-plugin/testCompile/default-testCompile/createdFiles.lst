@@ -1,0 +1,7 @@
+dev/jlibra/mnemonic/ExtendedPrivKeyTest.class
+dev/jlibra/KeyUtilsTest.class
+dev/jlibra/admissioncontrol/query/AccountDataTest.class
+dev/jlibra/LibraHelperTest.class
+dev/jlibra/mnemonic/LibraKeyFactoryTest.class
+dev/jlibra/mnemonic/MnemonicTest.class
+dev/jlibra/admissioncontrol/GrpcMapperTest.class
