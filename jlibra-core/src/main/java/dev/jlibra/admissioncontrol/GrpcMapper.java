@@ -87,7 +87,7 @@ public class GrpcMapper {
 
         return transactionsQueries.stream().map(argument -> {
             GetWithProof.GetTransactionsRequest getTransactionsRequest = GetWithProof.GetTransactionsRequest.newBuilder()
-                    .setFetchEvents(argument.getFetchEvents())
+                    .setFetchEvents(true)
 //                    .setField()
                     .setLimit(argument.getLimit())
 //                    .setRepeatedField()

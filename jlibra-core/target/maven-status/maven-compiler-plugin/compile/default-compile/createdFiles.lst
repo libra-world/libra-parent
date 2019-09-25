@@ -17,7 +17,9 @@ dev/jlibra/mnemonic/ExtendedPrivKey.class
 dev/jlibra/admissioncontrol/AdmissionControl.class
 dev/jlibra/admissioncontrol/transaction/AddressArgument.class
 dev/jlibra/LibraHelper.class
+dev/jlibra/admissioncontrol/query/ImmutableGetTransactions$1.class
 dev/jlibra/admissioncontrol/query/SignedTransactionWithProof.class
+dev/jlibra/admissioncontrol/query/GetTransactions.class
 dev/jlibra/admissioncontrol/query/ImmutableAccountData.class
 dev/jlibra/mnemonic/SecretKey.class
 dev/jlibra/admissioncontrol/transaction/ImmutableSubmitTransactionResult$1.class
@@ -48,6 +50,7 @@ dev/jlibra/admissioncontrol/query/ImmutableEventHandle$Builder.class
 dev/jlibra/admissioncontrol/query/ImmutableUpdateToLatestLedgerResult$1.class
 dev/jlibra/admissioncontrol/transaction/ImmutableSubmitTransactionResult$Builder.class
 dev/jlibra/admissioncontrol/query/ImmutableEvent$Builder.class
+dev/jlibra/admissioncontrol/query/ImmutableGetTransactions.class
 dev/jlibra/mnemonic/Seed.class
 dev/jlibra/admissioncontrol/query/ImmutableGetAccountState$Builder.class
 dev/jlibra/admissioncontrol/transaction/TransactionArgument.class
@@ -55,6 +58,7 @@ dev/jlibra/admissioncontrol/transaction/TransactionArgument$Type.class
 dev/jlibra/mnemonic/Master.class
 dev/jlibra/admissioncontrol/query/UpdateToLatestLedgerResult.class
 dev/jlibra/admissioncontrol/transaction/Program.class
+dev/jlibra/admissioncontrol/query/ImmutableGetTransactions$Builder.class
 dev/jlibra/admissioncontrol/query/ImmutableEvent.class
 dev/jlibra/mnemonic/LibraKeyFactory.class
 dev/jlibra/admissioncontrol/query/ImmutableQuery$1.class

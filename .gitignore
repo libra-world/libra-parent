@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+target/
 
 # Gradle
 # ------
@@ -43,3 +44,4 @@ logs
 /.settings/
 .classpath
 .project
+

@@ -13,6 +13,7 @@
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/admissioncontrol/query/GetAccountState.java
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/admissioncontrol/query/UpdateToLatestLedgerResult.java
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/mnemonic/Seed.java
+/Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/admissioncontrol/query/GetTransactions.java
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/move/Move.java
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/admissioncontrol/transaction/Transaction.java
 /Users/joooo/webroot/jlibra/jlibra-core/src/main/java/dev/jlibra/KeyUtils.java
