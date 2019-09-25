@@ -6,6 +6,9 @@ import static org.junit.Assert.assertThat;
 
 import com.google.protobuf.ByteString;
 
+import com.google.protobuf.UnknownFieldSet;
+import dev.jlibra.admissioncontrol.query.GetTransactions;
+import dev.jlibra.admissioncontrol.query.ImmutableGetTransactions;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.BeforeClass;
@@ -43,8 +46,8 @@ public class GrpcMapperTest {
                 .gasUnitPrice(1)
                 .sequenceNumber(1)
                 .program(ImmutableProgram.builder()
-                        .addArguments(new U64Argument(1000), new AddressArgument(new byte[] { 2 }))
-                        .code(ByteString.copyFrom(new byte[] { 1 }))
+                        .addArguments(new U64Argument(1000), new AddressArgument(new byte[]{2}))
+                        .code(ByteString.copyFrom(new byte[]{1}))
                         .build())
                 .build();
 
@@ -62,7 +65,7 @@ public class GrpcMapperTest {
         assertThat(rawTransaction.getSequenceNumber(), is(1L));
 
         // program
-        assertThat(rawTransaction.getProgram().getCode().toByteArray(), is(new byte[] { 1 }));
+        assertThat(rawTransaction.getProgram().getCode().toByteArray(), is(new byte[]{1}));
         assertThat(rawTransaction.getProgram().getArgumentsCount(), is(2));
         assertThat(rawTransaction.getProgram().getArgumentsList().get(0).getType(), is(ArgType.U64));
         assertThat(rawTransaction.getProgram().getArgumentsList().get(1).getType(), is(ArgType.ADDRESS));
@@ -81,8 +84,8 @@ public class GrpcMapperTest {
 
     @Test
     public void testAccountStateQueriesToRequestItems() {
-        byte[] address1 = new byte[] { 1 };
-        byte[] address2 = new byte[] { 2 };
+        byte[] address1 = new byte[]{1};
+        byte[] address2 = new byte[]{2};
 
         List<RequestItem> requestItems = GrpcMapper
                 .accountStateQueriesToRequestItems(
@@ -95,21 +98,48 @@ public class GrpcMapperTest {
     }
 
     @Test
+    public void testTransactionsRequestQueriesToRequestItems() {
+
+        UnknownFieldSet unknownFieldSet = UnknownFieldSet.newBuilder().build();
+        GetTransactions getTransactions = ImmutableGetTransactions
+                .builder()
+                .limit(10)
+                .startVersion(1)
+                .fetchEvents(false)
+                .unknownFieldSet(unknownFieldSet)
+                .build();
+
+        List<RequestItem> requestItems = GrpcMapper
+                .transactionRequestQueriesToRequestItems(
+                        asList(ImmutableGetTransactions.builder().from(getTransactions).build()));
+
+//                                ImmutableGetTransactions.builder().limit(1).build(),
+//                                ImmutableGetTransactions.builder().startVersion(1).build(),
+//                                ImmutableGetTransactions.builder().unknownFieldSet(unknownFieldSet).build(),
+//                                ImmutableGetTransactions.builder().fetchEvents(false).build(),
+//                                ImmutableGetTransactions.builder().startVersion(1).build()));
+
+        assertThat(requestItems, hasSize(1));
+//        assertThat(requestItems.get(0).getGetAccountStateRequest().getAddress().toByteArray(), is(address1));
+//        assertThat(requestItems.get(1).getGetAccountStateRequest().getAddress().toByteArray(), is(address2));
+    }
+
+    @Test
     public void testAccountTransactionBySequenceNumberQueriesToRequestItemsWithNullArgument() {
         assertThat(GrpcMapper.accountTransactionBySequenceNumberQueriesToRequestItems(null), is(emptyIterable()));
     }
 
     @Test
     public void testAccountTransactionBySequenceNumberQueriesToRequestItems() {
-        byte[] address1 = new byte[] { 1 };
-        byte[] address2 = new byte[] { 2 };
+        byte[] address1 = new byte[]{1};
+        byte[] address2 = new byte[]{2};
 
         List<RequestItem> requestItems = GrpcMapper
                 .accountTransactionBySequenceNumberQueriesToRequestItems(
                         asList(ImmutableGetAccountTransactionBySequenceNumber.builder()
-                                .accountAddress(address1)
-                                .sequenceNumber(1)
-                                .build(),
+                                        .accountAddress(address1)
+                                        .sequenceNumber(1)
+                                        .build(),
                                 ImmutableGetAccountTransactionBySequenceNumber.builder()
                                         .accountAddress(address2)
                                         .sequenceNumber(2)

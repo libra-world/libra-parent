@@ -12,13 +12,9 @@ import com.google.protobuf.ByteString;
 import admission_control.AdmissionControlOuterClass.SubmitTransactionRequest;
 import dev.jlibra.KeyUtils;
 import dev.jlibra.LibraHelper;
-import dev.jlibra.admissioncontrol.query.AccountData;
-import dev.jlibra.admissioncontrol.query.GetAccountState;
-import dev.jlibra.admissioncontrol.query.GetAccountTransactionBySequenceNumber;
-import dev.jlibra.admissioncontrol.query.ImmutableUpdateToLatestLedgerResult;
-import dev.jlibra.admissioncontrol.query.SignedTransactionWithProof;
-import dev.jlibra.admissioncontrol.query.UpdateToLatestLedgerResult;
+import dev.jlibra.admissioncontrol.query.*;
 import dev.jlibra.admissioncontrol.transaction.Transaction;
+import types.GetWithProof;
 import types.GetWithProof.GetAccountStateRequest;
 import types.GetWithProof.GetAccountTransactionBySequenceNumberRequest;
 import types.GetWithProof.RequestItem;
@@ -31,7 +27,7 @@ import types.Transaction.TransactionArgument;
 public class GrpcMapper {
 
     public static SubmitTransactionRequest toSubmitTransactionRequest(PublicKey publicKey, PrivateKey privateKey,
-            Transaction transaction) {
+                                                                      Transaction transaction) {
         ByteString senderAccount = ByteString.copyFrom(KeyUtils.toByteArrayLibraAddress(publicKey.getEncoded()));
         ByteString senderPublicKey = ByteString.copyFrom(KeyUtils.stripPublicKeyPrefix(publicKey.getEncoded()));
 
@@ -80,6 +76,27 @@ public class GrpcMapper {
 
             RequestItem requestItem = RequestItem.newBuilder()
                     .setGetAccountStateRequest(getAccountStateRequest)
+                    .build();
+            return requestItem;
+        }).collect(toList());
+    }
+
+    public static List<RequestItem> transactionRequestQueriesToRequestItems(List<GetTransactions> transactionsQueries) {
+        if (transactionsQueries == null)
+            return new ArrayList<>();
+
+        return transactionsQueries.stream().map(argument -> {
+            GetWithProof.GetTransactionsRequest getTransactionsRequest = GetWithProof.GetTransactionsRequest.newBuilder()
+                    .setFetchEvents(argument.getFetchEvents())
+//                    .setField()
+                    .setLimit(argument.getLimit())
+//                    .setRepeatedField()
+                    .setUnknownFields(argument.getUnknownFieldSet())
+                    .setStartVersion(argument.getStartVersion())
+                    .build();
+
+            RequestItem requestItem = RequestItem.newBuilder()
+                    .setGetTransactionsRequest(getTransactionsRequest)
                     .build();
             return requestItem;
         }).collect(toList());
