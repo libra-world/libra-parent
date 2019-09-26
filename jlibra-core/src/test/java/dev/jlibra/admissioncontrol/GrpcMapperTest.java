@@ -109,9 +109,8 @@ public class GrpcMapperTest {
                 .unknownFieldSet(unknownFieldSet)
                 .build();
 
-        List<RequestItem> requestItems = GrpcMapper
-                .transactionRequestQueriesToRequestItems(
-                        asList(ImmutableGetTransactions.builder().from(getTransactions).build()));
+        RequestItem requestItems = GrpcMapper
+                .transactionRequestQueriesToRequestItems(getTransactions);
 
 //                                ImmutableGetTransactions.builder().limit(1).build(),
 //                                ImmutableGetTransactions.builder().startVersion(1).build(),

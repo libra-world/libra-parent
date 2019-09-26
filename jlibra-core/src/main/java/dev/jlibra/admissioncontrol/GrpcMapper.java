@@ -81,25 +81,21 @@ public class GrpcMapper {
         }).collect(toList());
     }
 
-    public static List<RequestItem> transactionRequestQueriesToRequestItems(List<GetTransactions> transactionsQueries) {
-        if (transactionsQueries == null)
-            return new ArrayList<>();
+    public static RequestItem transactionRequestQueriesToRequestItems(GetTransactions transactionsQueries) {
 
-        return transactionsQueries.stream().map(argument -> {
-            GetWithProof.GetTransactionsRequest getTransactionsRequest = GetWithProof.GetTransactionsRequest.newBuilder()
-                    .setFetchEvents(true)
+        GetWithProof.GetTransactionsRequest getTransactionsRequest = GetWithProof.GetTransactionsRequest.newBuilder()
+                .setFetchEvents(true)
 //                    .setField()
-                    .setLimit(argument.getLimit())
+                .setLimit(transactionsQueries.getLimit())
 //                    .setRepeatedField()
-                    .setUnknownFields(argument.getUnknownFieldSet())
-                    .setStartVersion(argument.getStartVersion())
-                    .build();
+                .setUnknownFields(transactionsQueries.getUnknownFieldSet())
+                .setStartVersion(transactionsQueries.getStartVersion())
+                .build();
 
-            RequestItem requestItem = RequestItem.newBuilder()
-                    .setGetTransactionsRequest(getTransactionsRequest)
-                    .build();
-            return requestItem;
-        }).collect(toList());
+        RequestItem requestItem = RequestItem.newBuilder()
+                .setGetTransactionsRequest(getTransactionsRequest)
+                .build();
+        return requestItem;
     }
 
     public static List<RequestItem> accountTransactionBySequenceNumberQueriesToRequestItems(
@@ -126,9 +122,31 @@ public class GrpcMapper {
             UpdateToLatestLedgerResponse response) {
         List<AccountData> accountStates = new ArrayList<>();
         List<SignedTransactionWithProof> accountTransactionsBySequenceNumber = new ArrayList<>();
+        List<GetTransactions> getTransactions = new ArrayList<>();
 
         response.getResponseItemsList().forEach(responseItem -> {
             accountStates.addAll(LibraHelper.readAccountStates(responseItem.getGetAccountStateResponse()));
+
+            accountTransactionsBySequenceNumber.add(LibraHelper
+                    .readSignedTransactionWithProof(responseItem.getGetAccountTransactionBySequenceNumberResponse()));
+
+//            getTransactions.addAll(LibraHelper.readAccountStates(responseItem.getGetTransactionsResponse()));
+        });
+
+        return ImmutableUpdateToLatestLedgerResult.builder()
+                .accountStates(accountStates)
+                .accountTransactionsBySequenceNumber(accountTransactionsBySequenceNumber)
+                .build();
+    }
+
+    public static GetWithProof.GetTransactionsResponse updateToGetTransactionsResponseToResult(
+            UpdateToLatestLedgerResponse response) {
+        List<GetTransactions> getTransactions = new ArrayList<>();
+//        List<AccountData> accountStates = new ArrayList<>();
+//        List<SignedTransactionWithProof> accountTransactionsBySequenceNumber = new ArrayList<>();
+
+        response.getResponseItemsList().forEach(responseItem -> {
+            getTransactions.addAll(LibraHelper.readAccountStates(responseItem.getGetTransactionsResponse()));
 
             accountTransactionsBySequenceNumber.add(LibraHelper
                     .readSignedTransactionWithProof(responseItem.getGetAccountTransactionBySequenceNumberResponse()));
@@ -137,7 +155,9 @@ public class GrpcMapper {
         return ImmutableUpdateToLatestLedgerResult.builder()
                 .accountStates(accountStates)
                 .accountTransactionsBySequenceNumber(accountTransactionsBySequenceNumber)
+                .
                 .build();
     }
+
 
 }

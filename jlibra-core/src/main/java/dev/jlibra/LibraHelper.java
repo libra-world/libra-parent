@@ -13,15 +13,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import dev.jlibra.admissioncontrol.query.*;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 
-import dev.jlibra.admissioncontrol.query.AccountData;
-import dev.jlibra.admissioncontrol.query.Event;
-import dev.jlibra.admissioncontrol.query.ImmutableSignedTransactionWithProof;
-import dev.jlibra.admissioncontrol.query.SignedTransactionWithProof;
+import types.GetWithProof;
 import types.GetWithProof.GetAccountStateResponse;
 import types.GetWithProof.GetAccountTransactionBySequenceNumberResponse;
+import types.Transaction;
 import types.Transaction.RawTransaction;
+import types.TransactionInfoOuterClass;
 
 public class LibraHelper {
 
@@ -73,6 +73,7 @@ public class LibraHelper {
         return accountStates;
     }
 
+
     public static SignedTransactionWithProof readSignedTransactionWithProof(
             GetAccountTransactionBySequenceNumberResponse getAccountTransactionBySequenceNumberResponse) {
 
@@ -93,4 +94,10 @@ public class LibraHelper {
                 .build();
     }
 
+
+    public static List<Transaction.TransactionListWithProof> readTransactions(GetWithProof.GetTransactionsResponse getTransactionsResponse) {
+        Transaction.TransactionListWithProof transactionListWithProof = getTransactionsResponse.getTxnListWithProof();
+        List<TransactionInfoOuterClass.TransactionInfo> transactionInfo  = transactionListWithProof.getInfosList();
+
+    }
 }

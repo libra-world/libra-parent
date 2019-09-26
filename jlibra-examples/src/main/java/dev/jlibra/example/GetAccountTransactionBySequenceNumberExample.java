@@ -16,8 +16,8 @@ public class GetAccountTransactionBySequenceNumberExample {
     private static final Logger logger = LogManager.getLogger(GetAccountTransactionBySequenceNumberExample.class);
 
     public static void main(String[] args) {
-        String address = "6674633c78e2e00c69fd6e027aa6d1db2abc2a6c80d78a3e129eaf33dd49ce1c";
-        int sequenceNumber = 3;
+        String address = "04a1a534eaacebe977d63cd970dcd9c9dd715529172d92d76ce5f92dd5c34329";
+        int sequenceNumber = 1;
 
         ManagedChannel channel = ManagedChannelBuilder.forAddress("ac.testnet.libra.org", 8000)
                 .usePlaintext()

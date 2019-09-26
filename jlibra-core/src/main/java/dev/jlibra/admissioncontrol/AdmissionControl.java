@@ -11,6 +11,7 @@ import admission_control.AdmissionControlGrpc;
 import admission_control.AdmissionControlGrpc.AdmissionControlBlockingStub;
 import admission_control.AdmissionControlOuterClass.SubmitTransactionRequest;
 import admission_control.AdmissionControlOuterClass.SubmitTransactionResponse;
+import dev.jlibra.admissioncontrol.query.GetTransactions;
 import dev.jlibra.admissioncontrol.query.Query;
 import dev.jlibra.admissioncontrol.query.UpdateToLatestLedgerResult;
 import dev.jlibra.admissioncontrol.transaction.ImmutableSubmitTransactionResult;
@@ -30,7 +31,7 @@ public class AdmissionControl {
     }
 
     public SubmitTransactionResult submitTransaction(PublicKey publicKey, PrivateKey privateKey,
-            Transaction transaction) {
+                                                     Transaction transaction) {
         SubmitTransactionRequest request = toSubmitTransactionRequest(publicKey, privateKey, transaction);
 
         AdmissionControlBlockingStub stub = AdmissionControlGrpc.newBlockingStub(channel);
@@ -60,6 +61,21 @@ public class AdmissionControl {
                 .build());
 
         return GrpcMapper.updateToLatestLedgerResponseToResult(response);
+    }
+
+    public GetTransactions getTransactions(GetTransactions getTransactions) {
+        AdmissionControlBlockingStub stub = AdmissionControlGrpc.newBlockingStub(channel);
+
+        List<RequestItem> requestItems = new ArrayList<>();
+
+        requestItems.add(GrpcMapper.transactionRequestQueriesToRequestItems(getTransactions));
+
+        UpdateToLatestLedgerResponse response = stub.updateToLatestLedger(UpdateToLatestLedgerRequest.newBuilder()
+                .addAllRequestedItems(requestItems)
+                .build());
+
+        return GrpcMapper.updateToLatestLedgerResponseToResult(response);
+
     }
 
     @Override

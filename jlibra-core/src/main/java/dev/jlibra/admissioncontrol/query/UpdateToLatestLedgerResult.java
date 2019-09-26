@@ -11,4 +11,5 @@ public interface UpdateToLatestLedgerResult {
 
     List<SignedTransactionWithProof> getAccountTransactionsBySequenceNumber();
 
+
 }

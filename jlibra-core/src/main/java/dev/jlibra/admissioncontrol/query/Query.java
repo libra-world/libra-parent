@@ -10,4 +10,5 @@ public interface Query {
     List<GetAccountState> getAccountStateQueries();
 
     List<GetAccountTransactionBySequenceNumber> getAccountTransactionBySequenceNumberQueries();
+
 }
